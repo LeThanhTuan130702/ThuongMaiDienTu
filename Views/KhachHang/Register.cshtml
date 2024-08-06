@@ -1,0 +1,83 @@
+﻿@model ThuongMaiDienTu.ViewModel.RegisterVM
+@{
+	ViewData["Title"] = "Register";
+}
+
+<!-- Breadcrumb Start -->
+<div class="container-fluid">
+	<div class="row px-xl-5">
+		<div class="col-12">
+			<nav class="breadcrumb bg-light mb-30">
+				<a class="breadcrumb-item text-dark" href="#">Home</a>
+				<a class="breadcrumb-item text-dark" href="#">Shop</a>
+				<span class="breadcrumb-item active">Register</span>
+			</nav>
+		</div>
+	</div>
+</div>
+<!-- Breadcrumb End -->
+<!-- Checkout Start -->
+<div class="container-fluid">
+	<div class="row px-xl-5">
+		<div class="col-lg-8">
+			<h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Register Member</span></h5>
+			<div class="bg-light p-30 mb-5">
+				<form asp-action="Register" enctype="multipart/form-data" >
+					<div class="row">
+						<div class="col-md-6 form-group">
+							<label asp-for="@Model.MaKh"></label>
+							<input class="form-control" asp-for="@Model.MaKh">
+							<span asp-validation-for="@Model.MaKh" class="text-danger"></span>
+						</div>
+						<div class="col-md-6 form-group">
+							<label asp-for="@Model.MatKhau"></label>
+							<input class="form-control" asp-for="@Model.MatKhau">
+							<span asp-validation-for="@Model.MatKhau" class="text-danger"></span>
+						</div>
+						<div class="col-md-6 form-group">
+							<label asp-for="@Model.Email"></label>
+							<input class="form-control" asp-for="@Model.Email">
+							<span asp-validation-for="@Model.Email" class="text-danger"></span>
+						</div>
+						<div class="col-md-6 form-group">
+							<label asp-for="@Model.HoTen"></label>
+							<input class="form-control" asp-for="@Model.HoTen">
+							<span asp-validation-for="@Model.HoTen" class="text-danger"></span>
+						</div>
+						<div class="col-md-6 form-group">
+							<label asp-for="@Model.NgaySinh"></label>
+							<input class="form-control" asp-for="@Model.NgaySinh">
+							<span asp-validation-for="@Model.NgaySinh" class="text-danger"></span>
+						</div>
+						<div class="col-md-6 form-group">
+							<label asp-for="@Model.DiaChi"></label>
+							<input class="form-control " asp-for="@Model.DiaChi">
+							<span asp-validation-for="@Model.DiaChi" class="text-danger"></span>
+						</div>
+						<div class="form-check col-md-6 ">
+							<input class="form-check-input ml-auto " asp-for="@Model.GioiTinh">
+							<label class="form-check-label ml-3" for="Sex">Men?</label>
+						</div>
+						<div class="col-md-6 form-group">
+							<label asp-for="@Model.DienThoai"></label>
+							<input class="form-control" asp-for="@Model.DienThoai">
+							<span asp-validation-for="@Model.DienThoai" class="text-danger"></span>
+						</div>
+						<div class="col-md-6 form-group">
+							<label asp-for="@Model.Hinh"></label>
+							<input class="form-control" type="file" name="Hinh">
+							<span asp-validation-for="@Model.Hinh" class="text-danger"></span>
+						</div>
+						<button type="submit" class="btn btn-block btn-primary font-weight-bold py-3">Register</button>
+						
+
+				</form>
+
+			</div>
+		</div>
+			
+		</div>
+	</div>
+</div>
+</div>
+<!-- Checkout End -->

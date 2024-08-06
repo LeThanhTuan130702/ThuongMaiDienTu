@@ -1,0 +1,76 @@
+﻿@model X.PagedList.IPagedList<ThuongMaiDienTu.ViewModel.HangHoaVM>
+@using X.PagedList.Extensions
+@addTagHelper "*, Microsoft.AspNetCore.Mvc.TagHelpers"
+
+@{
+    ViewData["Title"] = "ProductList";
+    Layout = "~/Areas/Admin/Views/Shared/_layoutAdmin.cshtml";
+}
+
+<h1>ProductList</h1>
+<h2 class="text-danger  ">@TempData["Message"]</h2>
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr class="table-warning">
+            <th>
+                @Html.DisplayNameFor(model => model[0].Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model[0].Image)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model[0].Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model[0].Discout)
+            </th>
+
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var hh in Model) {
+        <tr class="table-success">
+            <td>
+                @Html.DisplayFor(modelItem => hh.Name)
+            </td>
+            <td>
+                <img class="img-fluid w-90" src="~/Hinh/HangHoa/@hh.Image" alt="@hh.Name">
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => hh.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => hh.Discout)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@hh.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@hh.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@hh.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+<div class="pagination">
+    @{
+        var item = Model[0] ;
+    }
+    @if (Model.HasPreviousPage)
+    {
+        <a class="page-link" href="@Url.Action("ProductList", new { loai=item.CateID??null,page = Model.PageNumber - 1 })">Previous</a>
+    }
+
+    @for (int i = 1; i <= Model.PageCount; i++)
+    {
+        <a href="@Url.Action("ProductList", new { loai=item.CateID??null,page = i })" class="page-link">@i</a>
+    }
+
+    @if (Model.HasNextPage)
+    {
+        <a class="page-link" href="@Url.Action("ProductList", new { loai=item.CateID??null,page = Model.PageNumber + 1 })">Next</a>
+    }
+</div>

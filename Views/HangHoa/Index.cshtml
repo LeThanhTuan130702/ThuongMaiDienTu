@@ -1,0 +1,52 @@
+﻿@* @model IEnumerable<ThuongMaiDienTu.ViewModel.HangHoaVM> *@
+@using X.PagedList.Extensions
+@model X.PagedList.IPagedList<ThuongMaiDienTu.ViewModel.HangHoaVM>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "_DanhSachHangHoa";
+}
+ <!-- Breadcrumb Start -->
+ @section BreadCum{
+<div class="container-fluid"> 
+    <div class="row px-xl-5">
+        <div class="col-12">
+            <nav class="breadcrumb bg-light mb-30">
+                <a class="breadcrumb-item text-dark" href="#">Home</a>
+                <a class="breadcrumb-item text-dark" href="#">Shop</a>
+                <span class="breadcrumb-item active">Shop List</span>
+            </nav>
+        </div>
+    </div>
+</div>
+ }
+<!-- Breadcrumb End -->
+<!-- Shop Start -->
+@await Html.PartialAsync("ProductItem",Model)
+<div class="col-12">
+    <nav>
+        <div class="pagination justify-content-center">
+            @{
+                var item = Model[0]??null;
+            }
+            <div class="pagination">
+                @if (Model.HasPreviousPage)
+                {
+                    <a class="page-link" href="@Url.Action("Index", new { loai=item.CateID??null,page = Model.PageNumber - 1 })">Previous</a>
+                }
+
+                @for (int i = 1; i <= Model.PageCount; i++)
+                {
+                    <a href="@Url.Action("Index", new { loai=item.CateID??null,page = i })" class="page-link">@i</a>
+                }
+
+                @if (Model.HasNextPage)
+                {
+                    <a class="page-link" href="@Url.Action("Index", new { loai=item.CateID??null,page = Model.PageNumber + 1 })">Next</a>
+                }
+            </div>
+
+
+        </div>
+    </nav>
+</div>
+<!-- Shop End -->

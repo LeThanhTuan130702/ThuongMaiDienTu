@@ -1,0 +1,227 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model IEnumerable<ThuongMaiDienTu.ViewModel.CartItem>
+@{
+    
+    ViewData["Title"] = "CheckOut";
+}
+<!-- Breadcrumb Start -->
+<div class="container-fluid">
+    <div class="row px-xl-5">
+        <div class="col-12">
+            <nav class="breadcrumb bg-light mb-30">
+                <a class="breadcrumb-item text-dark" href="/">Home</a>
+                <a class="breadcrumb-item text-dark" href="/HangHoa">Shop</a>
+                <span class="breadcrumb-item active">Checkout</span>
+            </nav>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumb End -->
+<!-- Checkout Start -->
+<div class="container-fluid">
+    <div class="row px-xl-5">
+        <div class="col-lg-8">
+            <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Billing Address</span></h5>
+            <form asp-action="CheckOut" asp-controller="Cart">
+            <div class="bg-light p-30 mb-5">
+                <div class="row">
+                    <div class="col-md-12 form-group">
+                            <div class="text-danger" asp-validation-summary="All"></div>
+
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" name="SameCustomer" id="SameCustomer" value="false" >
+                                <label class="custom-control-label" for="SameCustomer" >Same customer information?</label>
+                        </div>
+                    </div>
+                    <div class="col-md-12 form-group delivery-info">
+                        <label >Name</label>
+                        <input class="form-control " id="name" name="name" type="text" placeholder="John">
+                    </div>
+                    <div class="col-md-12 form-group delivery-info">
+                        <label>Mobile No</label>
+                            <input class="form-control" id="phone" name="Phone" type="text">
+                    </div>
+                    <div class="col-md-12 form-group delivery-info">
+                        <label>Address</label>
+                            <input class="form-control" id="address" name="Address" type="text">
+                    </div>
+                    <div class="col-md-12 form-item">
+                        <textarea name="note" id="note" class="form-control" spellcheck="false"
+                                  cols="30" rows="11" placeholder="Note here"></textarea>
+                        
+                    </div>
+                        <input class="btn btn-block btn-primary font-weight-bold py-3" asp-action="CheckOut" asp-controller="Cart" name="payment" type="submit" value="Place Order(COD)"></input>
+                        <input class="btn btn-block btn-primary font-weight-bold py-3" asp-action="CheckOut" asp-controller="Cart" name="payment" type="submit" value="Place Order By VNPAY"></input>
+
+                </div>
+                    <div id="paypal-button-container" style="max-width:1000px; margin-top:5px; "></div>
+
+           </div>
+                
+		    </form>
+            
+
+
+        </div>      
+        <div class="col-lg-4">
+            <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Order Total</span></h5>
+            <div class="bg-light p-30 mb-5">
+                <div class="border-bottom">
+                    <div class="d-flex justify-content-between"">
+                        <h6>Products</h6>
+                        <h6>Quantity</h6>
+                        <h6>Total</h6>
+                    </div>
+                 
+                    @foreach(var item in Model){
+                    <div class="d-flex justify-content-between">
+                        <p style="width:100px ">@item.Name</p>
+                        <p style ="width:50px ">@item.Quantity</p>
+                            <p style="width:35px">@(item.Price - (item.Price * item.Discout))</p>
+                    </div>
+                    }
+                 
+                </div>
+                <div class="border-bottom pt-3 pb-2">
+                    <div class="d-flex justify-content-between mb-3">
+                        <h6>Subtotal</h6>
+                        <h6>@Model.Sum(p=>p.Total).ToString("#,##0.00")$</h6>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <h6 class="font-weight-medium">Shipping</h6>
+                        <h6 class="font-weight-medium">$10</h6>
+                    </div>
+                </div>
+                <div class="pt-2">
+                    <div class="d-flex justify-content-between mt-2">
+                        <h5>Total</h5>
+                        <h5>@((Model.Sum(p => p.Total) + 10).ToString("#,##0.00"))$</h5>
+                    </div>
+                </div>
+            </div>
+       @*      <div class="mb-5">
+                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Payment</span></h5>
+                <div class="bg-light p-30">
+                    <div class="form-group">
+                        <div class="custom-control custom-radio">
+                            <input type="radio" class="custom-control-input" name="payment" id="paypal">
+                            <label class="custom-control-label" for="paypal">Paypal</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="custom-control custom-radio">
+                            <input type="radio" class="custom-control-input" name="payment" id="directcheck">
+                            <label class="custom-control-label" for="directcheck">Direct Check</label>
+                        </div>
+                    </div>
+                    <div class="form-group mb-4">
+                        <div class="custom-control custom-radio">
+                            <input type="radio" class="custom-control-input" name="payment" id="banktransfer">
+                            <label class="custom-control-label" for="banktransfer">Bank Transfer</label>
+                        </div>
+                    </div>
+                    <button class="btn btn-block btn-primary font-weight-bold py-3">Place Order</button>
+                    <div>
+                </div>
+
+            </div>
+        </div> *@
+    </div>
+    </div>
+</div>
+<!-- Checkout End -->
+@section Scripts{
+
+
+
+    <script src="https://www.paypal.com/sdk/js?client-id=@ViewBag.PaypalClientId"></script>
+    <script>
+        $(document).ready(function () {
+            $(".delivery-info").collapse("show");
+            $("#SameCustomer").change(function () {
+                if ($(this).prop("checked")) {
+                    $(this).val(true);
+                    $(".delivery-info").collapse("hide");
+                }
+                else {
+                    $(this).val(false);
+                    $(".delivery-info").collapse("show");
+
+                   
+                }
+            });
+            });
+        paypal.Buttons({
+            style: {
+                disableMaxWidth: 10,
+                color: 'silver',
+                layout: 'vertical',
+                taglien:'false'
+            },
+                createOrder:(data,actions)=> {
+                return fetch("/Cart/create-paypal-order", {
+                    method: "POST",
+                   
+                }).then(
+                    (response) => {
+                    if (!response.ok) { 
+                        return response.json().then((err) => { throw err; });
+                    }
+                    return response.json();
+
+                }).then(order => order.id)
+                .catch(err =>  alert(err.message));
+         
+            },
+            onApprove: (data, actions)=> {
+                // Capture the funds from the transaction.
+                /* ?orderID=${data.orderID} */
+                const checkbox = document.getElementById('SameCustomer');
+                const isChecked = checkbox.checked;
+                const dataToSend = {
+                    SameCustomer: isChecked,
+                    Name: document.getElementById('name').value,
+                    Address: document.getElementById("address").value,
+                    Phone: document.getElementById("phone").value,
+                    Note: document.getElementById("note").value,
+                };
+                console.log('Dữ liệu gửi:', dataToSend);
+                return fetch(`/Cart/capture-paypal-order?orderId=${data.orderID}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(dataToSend)
+                   
+                }).then((response) => {
+                    if (!response.ok) {
+                        return response.json().then((err) => { throw err; });
+                        window.location.href = "/Cart/PaymentFail";
+
+                    }
+                   
+
+                    window.location.href = "/Cart/PaymentSuccess";  
+
+                }).catch(err => { alert(err.message); });
+            }
+            
+                   
+
+             
+
+                // Show success message to buyer
+            
+        }).render('#paypal-button-container');
+            
+      
+       
+
+        
+    </script>
+}
+

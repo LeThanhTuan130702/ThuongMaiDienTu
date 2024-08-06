@@ -1,0 +1,98 @@
+﻿@model ThuongMaiDienTu.ViewModel.HangHoaDetailVM
+@addTagHelper "*, Microsoft.AspNetCore.Mvc.TagHelpers"
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Areas/Admin/Views/Shared/_layoutAdmin.cshtml";
+}
+
+<h1>Edit</h1>
+
+<h4>HangHoaDetail</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post" asp-action="Edit"  enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger" ></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Image" class="control-label"></label>
+                <img id="imagePreview" class="img-fluid w-100" src="~/Hinh/HangHoa/@Model.Image" alt="@Model.Name"></img>
+                <input id ="fileInput" asp-for="Image" type="file" name="Hinh" class="form-control" />
+                <span asp-validation-for="Image" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Price" class="control-label"></label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Discout" class="control-label"></label>
+                <input asp-for="Discout" class="form-control" />
+                <span asp-validation-for="Discout" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ShortDescription" class="control-label"></label>
+                <input asp-for="ShortDescription" class="form-control" />
+                <span asp-validation-for="ShortDescription" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Information" class="control-label"></label>
+                <input asp-for="Information" class="form-control" />
+                <span asp-validation-for="Information" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Review" class="control-label"></label>
+                <input asp-for="Review" class="form-control" />
+                <span asp-validation-for="Review" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="QuantityInStock" class="control-label"></label>
+                <input asp-for="QuantityInStock" class="form-control" />
+                <span asp-validation-for="QuantityInStock" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CateId" class="control-label"></label>
+                <select asp-for="CateId" class="form-control" asp-items="@ViewBag.Maloai"></select>
+                <span asp-validation-for="CateId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+@section Scripts{
+    <script>
+        const fileInput = document.getElementById('fileInput');
+        const imagePreview = document.getElementById('imagePreview');
+        fileInput.addEventListener('change', function () {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+
+                reader.addEventListener('load', function () {
+                    imagePreview.setAttribute('src', this.result);
+                    imagePreview.style.display = 'block';
+                });
+
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+
+}

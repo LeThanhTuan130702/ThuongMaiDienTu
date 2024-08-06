@@ -1,0 +1,40 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model X.PagedList.IPagedList<ThuongMaiDienTu.ViewModel.HangHoaVM>
+<div class="col-12 pb-1">
+    <h3><b>Have @Model.TotalItemCount Products.</b></h3>
+</div>
+@foreach (var item in Model)
+{
+    <div class="col-lg-4 col-md-6 col-sm-6 pb-1">
+        <div class="product-item bg-light mb-4">
+            <a asp-action="Detail" asp-controller="HangHoa" asp-route-id="@item.Id"></a>
+            <div class="product-img position-relative overflow-hidden">
+                <img class="img-fluid w-100" src="~/Hinh/HangHoa/@item.Image" alt="@item.Name">
+                <div class="product-action">
+                    <a class="btn btn-outline-dark btn-square" asp-action="AddToCart" asp-controller="Cart" asp-route-id="@item.Id"><i class="fa fa-shopping-cart"></i></a>
+                    <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
+                    <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
+                    <a class="btn btn-outline-dark btn-square" asp-action="Detail" asp-controller="HangHoa" asp-route-id="@item.Id"><i class="fa fa-search"></i></a>
+                </div>
+            </div>
+            <div class="text-center py-4">
+                <a class="h6 text-decoration-none text-truncate" asp-action="Detail" asp-controller="HangHoa" asp-route-id="@item.Id">@item.Name</a>
+                <div class="d-flex align-items-center justify-content-center mt-2">
+                    <h5>@(item.Price - (item.Discout * item.Price))$</h5><h6 class="text-muted ml-2"><del>@item.Price$</del></h6>
+                </div>
+                <div class="d-flex align-items-center justify-content-center mb-1">
+                    <small class="fa fa-star text-primary mr-1"></small>
+                    <small class="fa fa-star text-primary mr-1"></small>
+                    <small class="fa fa-star text-primary mr-1"></small>
+                    <small class="fa fa-star text-primary mr-1"></small>
+                    <small class="fa fa-star text-primary mr-1"></small>
+                    <small>(99)</small>
+                </div>
+            </div>
+        </div>
+    </div>
+}
