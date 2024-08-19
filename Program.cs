@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using ThuongMaiDienTu.Data;
 using ThuongMaiDienTu.Helper;
 using ThuongMaiDienTu.Service;
@@ -8,14 +9,29 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddDbContext<Hshop2023Context>(op=>op.UseSqlServer(builder.Configuration.GetConnectionString("Hshop")));
+builder.Services.AddDbContext<Hshop2023Context>(op=>op.UseSqlServer(builder.Configuration.GetConnectionString("ThuongMaiDienTuDB")));
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(option =>
 {
-    option.LoginPath = "/KhachHang/Login";
+    option.Events.OnRedirectToLogin = context =>
+    {
+        var isAdminArea = context.Request.Path.StartsWithSegments("/Admin");
+        if (isAdminArea)
+        {
+            context.Response.Redirect("/Admin/account/Login");
+        }
+        else
+        {
+            context.Response.Redirect("/KhachHang/Login");
+        }
+        return Task.CompletedTask;
+    };
+
+    //option.LoginPath = "/KhachHang/Login";
     option.AccessDeniedPath = "/AccessDenied";
 });
+
 builder.Services.AddSingleton(x => new PaypalClient(
     builder.Configuration["PayPal:AppId"],
     builder.Configuration["PayPal:AppSecret"],
@@ -29,7 +45,7 @@ builder.Services.AddSession(options =>
 	options.Cookie.IsEssential = true;
 });
 var app = builder.Build();
-
+app.UseStatusCodePagesWithRedirects("/Home/Error?statuscode={0}");
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {

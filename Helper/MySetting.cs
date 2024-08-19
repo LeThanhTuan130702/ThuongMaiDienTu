@@ -4,6 +4,8 @@
     {
        public const string CART_KEY = "MYCART";
        public const string CLAIMS_CUSTOMERID = "CustomerID";
+        public const string CLAIMS_Admin = "AdminId";
+
     }
     public class PaymentType
     {

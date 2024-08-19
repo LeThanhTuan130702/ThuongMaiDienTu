@@ -1,0 +1,128 @@
+﻿@model X.PagedList.IPagedList<ThuongMaiDienTu.ViewModel.HoadonVM>
+@addTagHelper "*, Microsoft.AspNetCore.Mvc.TagHelpers"
+
+<table class="table">
+    <thead>
+        <tr class="table-warning">
+            <th>
+                @Html.DisplayNameFor(model => model[0].MaKh)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model[0].NgayDat)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model[0].MaTrangThai)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model[0].SoDienThoai)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model[0].Ten)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model[0].DiaChi)
+            </th>
+            <th>
+                Tổng Tiền
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var hh in Model)
+        {
+            <tr class="table-success">
+                <td>
+                    @Html.DisplayFor(modelItem => hh.MaKh)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => hh.NgayDat)
+                </td>
+                <td>
+                    @if (hh.MaTrangThai == 1)
+                    {
+                        <i>Đã thanh toán </i>
+                    }
+
+                    else
+                    {
+                        @if (hh.MaTrangThai == 0)
+                        {
+
+                            <i>Chưa thanh toán</i>
+                        }
+                        else
+                        {
+                            @if (hh.MaTrangThai == 3)
+                            {
+                                <i>Đã giao hàng</i>
+                            }
+                            else
+                            {
+                                <i>Thanh toán bị lỗi</i>
+                            }
+
+                        }
+                    }
+
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => hh.SoDienThoai)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => hh.Ten)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => hh.DiaChi)
+                </td>
+                <td>
+                    @hh.TongTien$
+                </td>
+                <td>@if(hh.MaTrangThai==3)
+                    {
+                    }
+                    else{
+                    <a asp-action="Done" asp-route-id="@hh.MaHd">Done</a>
+
+                    }
+
+
+                    <a asp-action="Details" asp-controller="HoaDons" asp-area="Admin" asp-route-id="@hh.MaHd">Details</a> 
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div class="pagination">
+    @{
+        var itemcout = 0;
+
+    }
+    @if (Model.HasPreviousPage)
+    {
+        var item = Model.PageNumber - 1;
+        <a class="page-link" href="@Url.Action("index", new {ViewBag.filter , page = Model.PageNumber - 1 })">Previous</a>
+        if (Model.PageNumber - 1 != 1)
+        {
+            item = item - 1;
+            <a class="page-link" href="@Url.Action("index", new { ViewBag.filter,page = Model.PageNumber - 2 })">@item</a>
+            item += 1;
+        }
+        <a class="page-link" href="@Url.Action("index", new {ViewBag.filter, page = Model.PageNumber - 1 })">@item</a>
+
+    }
+
+    @for (int i = Model.PageNumber; i <= Model.PageCount; i++)
+    {
+        if (itemcout < 6)
+        {
+            <a href="@Url.Action("index", new {ViewBag.filter, page = i })" class="page-link">@i</a>
+            itemcout += 1;
+        }
+    }
+
+    @if (Model.HasNextPage)
+    {
+        <a class="page-link" href="@Url.Action("index", new {ViewBag.filter, page = Model.PageNumber + 1 })">Next</a>
+    }
+</div>

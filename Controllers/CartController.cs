@@ -82,7 +82,7 @@ namespace ThuongMaiDienTu.Controllers
             HttpContext.Session.Set(MySetting.CART_KEY, cart);
             return RedirectToAction("Index");
         }
-        [Authorize]
+        [Authorize(Roles = "Customer")]
         [HttpGet]
         public IActionResult CheckOut()
         {
@@ -96,7 +96,7 @@ namespace ThuongMaiDienTu.Controllers
 
             return View(Cart);
         }
-        [Authorize]
+        [Authorize(Roles = "Customer")]
         [HttpPost]
         public IActionResult CheckOut(CheckOutVM model, string payment = PaymentType.COD)
         {
@@ -157,17 +157,17 @@ namespace ThuongMaiDienTu.Controllers
             }
             return View(Cart);
         }
-        [Authorize]
+        [Authorize(Roles = "Customer")]
         public IActionResult PaymentFail()
         {
             return View("fail");
         }
-        [Authorize]
+        [Authorize(Roles = "Customer")]
         public IActionResult PaymentSuccess()
         {
             return View("Success");
         }
-        [Authorize]
+        [Authorize(Roles = "Customer")]
 
         public IActionResult PaymentCallBack()
         {
@@ -252,7 +252,7 @@ namespace ThuongMaiDienTu.Controllers
             }
         }
         #region PaypalPayment
-        [Authorize]
+        [Authorize(Roles = "Customer")]
         [HttpPost("/Cart/create-paypal-order")]
         public async Task<IActionResult> CreatePaypalOrder(CancellationToken cancellationToken)
         {
@@ -269,7 +269,7 @@ namespace ThuongMaiDienTu.Controllers
                 return BadRequest(error);
             }
         }
-        [Authorize]
+        [Authorize(Roles = "Customer")]
         [HttpPost("/Cart/capture-paypal-order")]
         public async Task<IActionResult> CapturePayPalOrder(string orderID,[FromBody]CheckOutVM model,CancellationToken cancellationToken)
         {

@@ -15,6 +15,7 @@ namespace ThuongMaiDienTu.Areas.Admin.Controllers
     [Area("Admin")]
     [Route("admin")]
     [Route("admin/homeAdmin")]
+    [Authorize(Roles = "Admin")]
 
     public class HomeAdminController : Controller
     {
@@ -32,6 +33,7 @@ namespace ThuongMaiDienTu.Areas.Admin.Controllers
         {
             return View();
         }
+
         [Route("ProductList")]
         public IActionResult ProductList(int? loai,int? page)
         {
@@ -123,7 +125,6 @@ namespace ThuongMaiDienTu.Areas.Admin.Controllers
                 TempData["Message"] = "Không Tìm Thấy Sản phẩm Sửa";
                 return RedirectToAction("ProductList");
 
-                return NotFound();
             }
            
             else

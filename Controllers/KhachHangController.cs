@@ -55,6 +55,7 @@ namespace ThuongMaiDienTu.Controllers
 		[HttpGet]
 		public IActionResult Login(string? ReturnUrl)
 		{
+
 			ViewBag.ReturnUrl = ReturnUrl;
 			return View();
 
@@ -96,7 +97,7 @@ namespace ThuongMaiDienTu.Controllers
 							var claimsIdentity=new ClaimsIdentity(claims,"login");
 							var claimsPrinciple = new ClaimsPrincipal(claimsIdentity);
 							await HttpContext.SignInAsync(claimsPrinciple);
-                            HttpContext.Session.SetString("UserName", KH.HoTen);
+                            HttpContext.Session.SetString("User", KH.HoTen);
                             if (Url.IsLocalUrl(ReturnUrl))
 							{
 								 return Redirect(ReturnUrl);
@@ -113,14 +114,14 @@ namespace ThuongMaiDienTu.Controllers
 			return View();
 
 		}
-		[Authorize]
+		[Authorize(Roles = "Customer")]
 		[HttpGet]
 		public IActionResult Profile()
 		{
 
 			return View(); 
 		}
-        [Authorize]
+        [Authorize(Roles = "Customer")]
         public async Task<IActionResult> LogOut()
         {
 			await HttpContext.SignOutAsync();

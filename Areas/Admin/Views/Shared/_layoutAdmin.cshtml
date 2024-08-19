@@ -38,10 +38,13 @@
                             <div class="input-group-prepend bg-transparent">
                                 <i class="input-group-text border-0 mdi mdi-magnify"></i>
                             </div>
-                            <input type="text" class="form-control bg-transparent border-0" placeholder="Search projects">
+                           
                         </div>
                     </form>
                 </div> *@
+                @{
+                    var username = Context.Session.GetString("Admin");
+                }
                 <ul class="navbar-nav navbar-nav-right">
                     <li class="nav-item nav-profile dropdown">
                         <a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
@@ -50,7 +53,7 @@
                                 <span class="availability-status online"></span>
                             </div>
                             <div class="nav-profile-text">
-                                <p class="mb-1 text-black">David Greymaax</p>
+                                <p class="mb-1 text-black">@username</p>
                             </div>
                         </a>
                         <div class="dropdown-menu navbar-dropdown" aria-labelledby="profileDropdown">
@@ -58,7 +61,7 @@
                                 <i class="mdi mdi-cached me-2 text-success"></i> Activity Log
                             </a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">
+                            <a class="dropdown-item" href="/admin/account/LogOut">
                                 <i class="mdi mdi-logout me-2 text-primary"></i> Signout
                             </a>
                         </div>
@@ -218,7 +221,7 @@
                         </a>
                         <div class="collapse" id="ui-basic-1">
                             <ul class="nav flex-column sub-menu">
-                                <li class="nav-item"> <a class="nav-link" asp-area="admin" asp-action="OrderList" asp-controller="HomeAdmin">OrderList</a></li>
+                                <li class="nav-item"> <a class="nav-link" asp-area="admin" asp-action="index" asp-controller="HoaDons">OrderList</a></li>
                             </ul>
                         </div>
                     </li>
@@ -230,7 +233,7 @@
                         </a>
                         <div class="collapse" id="ui-basic-2">
                             <ul class="nav flex-column sub-menu">
-                                <li class="nav-item"> <a class="nav-link" asp-area="admin" asp-action="AccountList" asp-controller="HomeAdmin">AccountList</a></li>
+                                <li class="nav-item"> <a class="nav-link" asp-area="admin" asp-action="AccountList" asp-controller="Account">AccountList</a></li>
                             </ul>
                         </div>
                     </li>

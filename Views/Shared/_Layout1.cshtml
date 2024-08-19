@@ -46,7 +46,8 @@
                         <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">My Account</button>
                         <div class="dropdown-menu dropdown-menu-right">
                             @{
-                                var username = Context.Session.GetString("UserName");
+                                var username = Context.Session.GetString("User");
+                                
                             }
                             @if(string.IsNullOrEmpty(username))
                             {
