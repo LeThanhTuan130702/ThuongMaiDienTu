@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -18,40 +19,47 @@ namespace ThuongMaiDienTu.Areas.Admin.Controllers
     [Route("admin/Account")]
     public class NhanViensController : Controller
     {
+        private readonly IMapper _mapper;
         private readonly Hshop2023Context _context;
 
-        public NhanViensController(Hshop2023Context context)
+        public NhanViensController(Hshop2023Context context,IMapper mapper)
         {
+            _mapper=mapper;
             _context = context;
         }
 
         // GET: Admin/NhanViens
         [HttpGet]
         [Route("Index")]
-        public  IActionResult Index()
+        [Authorize(Roles = "Admin")]
+
+        public IActionResult Index()
         {
             return View( _context.NhanViens.ToList());
         }
 
         // GET: Admin/NhanViens/Details/5
-        public async Task<IActionResult> Details(string id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+        //public async Task<IActionResult> Details(string id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var nhanVien = await _context.NhanViens
-                .FirstOrDefaultAsync(m => m.MaNv == id);
-            if (nhanVien == null)
-            {
-                return NotFound();
-            }
+        //    var nhanVien = await _context.NhanViens
+        //        .FirstOrDefaultAsync(m => m.MaNv == id);
+        //    if (nhanVien == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return View(nhanVien);
-        }
+        //    return View(nhanVien);
+        //}
 
         // GET: Admin/NhanViens/Create
+        [Route("Create")]
+        [Authorize(Roles = "Admin")]
+
         public IActionResult Create()
         {
             return View();
@@ -62,18 +70,44 @@ namespace ThuongMaiDienTu.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("MaNv,HoTen,Email,MatKhau,GioiTinh,NgaySinh,DiaChi,DienThoai,Hinh,HieuLuc,VaiTro,RandomKey")] NhanVien nhanVien)
+        [Route("Create")]
+        [Authorize(Roles = "Admin")]
+        public IActionResult Create(RegisterVM model, IFormFile? Hinh)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(nhanVien);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    var NV = _mapper.Map<NhanVien>(model);
+                    NV.MaNv = model.MaKh;
+                    NV.RandomKey = Util.GenerateRandomKey();
+                    NV.MatKhau = model.MatKhau.ToMd5Hash(NV.RandomKey);
+                    NV.HieuLuc = true;//xu ly sau
+                    NV.VaiTro = 0;
+                    if (Hinh != null)
+                    {
+                        NV.Hinh = Util.UploadImage(Hinh, "NhanVien");
+                    }
+                    _context.NhanViens.Add(NV);
+                    _context.SaveChanges();
+                    TempData["Message"] = "Successfully";
+                    return RedirectToAction("Index");
+                }
+                catch (Exception ex)
+                {
+                    return NotFound();
+                }
+
             }
-            return View(nhanVien);
+            return View();
         }
 
+
+
         // GET: Admin/NhanViens/Edit/5
+        [Route("Edit")]
+        [Authorize(Roles = "Admin")]
+
         public async Task<IActionResult> Edit(string id)
         {
             if (id == null)
@@ -86,7 +120,7 @@ namespace ThuongMaiDienTu.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            return View(nhanVien);
+            return View();
         }
 
         // POST: Admin/NhanViens/Edit/5
@@ -94,68 +128,72 @@ namespace ThuongMaiDienTu.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("MaNv,HoTen,Email,MatKhau,GioiTinh,NgaySinh,DiaChi,DienThoai,Hinh,HieuLuc,VaiTro,RandomKey")] NhanVien nhanVien)
-        {
-            if (id != nhanVien.MaNv)
-            {
-                return NotFound();
-            }
+        [Route("Edit")]
+    [Authorize(Roles = "Admin")]
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(nhanVien);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!NhanVienExists(nhanVien.MaNv))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(nhanVien);
-        }
+
+        //public async Task<IActionResult> Edit(string id, RegisterVM model, IFormFile? Hinh)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        try
+        //        {
+        //            _context.Update(nhanVien);
+        //            await _context.SaveChangesAsync();
+        //        }
+        //        catch (DbUpdateConcurrencyException)
+        //        {
+        //            if (!NhanVienExists(nhanVien.MaNv))
+        //            {
+        //                return NotFound();
+        //            }
+        //            else
+        //            {
+        //                throw;
+        //            }
+        //        }
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    return View(nhanVien);
+        //}
 
         // GET: Admin/NhanViens/Delete/5
-        public async Task<IActionResult> Delete(string id)
+        [Route("Delete")]
+        [Authorize(Roles = "Admin")]
+
+        public IActionResult Delete(string id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var nhanVien = await _context.NhanViens
-                .FirstOrDefaultAsync(m => m.MaNv == id);
+            var nhanVien =  _context.NhanViens
+                .FirstOrDefault(m => m.MaNv == id);
             if (nhanVien == null)
             {
                 return NotFound();
             }
-
-            return View(nhanVien);
+            nhanVien.HieuLuc = false;
+            _context.Update(nhanVien);
+            TempData["Message"] = "Successfully";
+            return RedirectToAction(nameof(Index));
         }
 
         // POST: Admin/NhanViens/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id)
-        {
-            var nhanVien = await _context.NhanViens.FindAsync(id);
-            if (nhanVien != null)
-            {
-                _context.NhanViens.Remove(nhanVien);
-            }
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> DeleteConfirmed(string id)
+        //{
+        //    var nhanVien = await _context.NhanViens.FindAsync(id);
+        //    if (nhanVien != null)
+        //    {
+        //        _context.NhanViens.Remove(nhanVien);
+        //    }
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+        //    await _context.SaveChangesAsync();
+        //    return RedirectToAction(nameof(Index));
+        //}
 
         private bool NhanVienExists(string id)
         {
@@ -174,16 +212,16 @@ namespace ThuongMaiDienTu.Areas.Admin.Controllers
         //    {
         //        try
         //        {
-        //            var KH = _mapper.Map<KhachHang>(model);
-        //            KH.RandomKey = Util.GenerateRandomKey();
-        //            KH.MatKhau = model.MatKhau.ToMd5Hash(KH.RandomKey);
-        //            KH.HieuLuc = true;//xu ly sau
-        //            KH.VaiTro = 0;
+        //            var NV = _mapper.Map<NVachHang>(model);
+        //            NV.RandomKey = Util.GenerateRandomKey();
+        //            NV.MatNVau = model.MatNVau.ToMd5Hash(NV.RandomKey);
+        //            NV.HieuLuc = true;//xu ly sau
+        //            NV.VaiTro = 0;
         //            if (Hinh != null)
         //            {
-        //                KH.Hinh = Util.UploadImage(Hinh, "KhachHang");
+        //                NV.Hinh = Util.UploadImage(Hinh, "NVachHang");
         //            }
-        //            _context.KhachHangs.Add(KH);
+        //            _context.NVachHangs.Add(NV);
         //            _context.SaveChanges();
         //            return RedirectToAction("Index", "HangHoa");
         //        }

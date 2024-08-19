@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace ThuongMaiDienTu.Data;
 
 public partial class NhanVien
 {
+    [Key]
     public string MaNv { get; set; } = null!;
 
     public string HoTen { get; set; } = null!;

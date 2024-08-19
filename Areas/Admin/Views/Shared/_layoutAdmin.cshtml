@@ -233,7 +233,7 @@
                         </a>
                         <div class="collapse" id="ui-basic-2">
                             <ul class="nav flex-column sub-menu">
-                                <li class="nav-item"> <a class="nav-link" asp-area="admin" asp-action="AccountList" asp-controller="Account">AccountList</a></li>
+                                <li class="nav-item"> <a class="nav-link" asp-area="admin" asp-action="index" asp-controller="NhanViens">AccountList</a></li>
                             </ul>
                         </div>
                     </li>
@@ -298,7 +298,7 @@
             </nav>
             <!-- partial -->
             <div class="main-panel">
-                <div class="content-wrapper">
+                <div class="content-wrapper" style="max-width:100%;overflow-x:auto;">
                     @RenderBody()
                 </div>
                 <!-- content-wrapper ends -->

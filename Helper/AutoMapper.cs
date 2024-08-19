@@ -8,6 +8,7 @@ namespace ThuongMaiDienTu.Helper
 	{
 		public AutoMapperProfile() {
 			CreateMap<RegisterVM, KhachHang>().ReverseMap();
+            CreateMap<RegisterVM, NhanVien>().ReverseMap();
             CreateMap<HangHoaDetailVM, HangHoa>().ReverseMap();
 
         }
